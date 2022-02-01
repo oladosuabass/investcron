@@ -1,0 +1,100 @@
+
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+<div style="text-align:left;"> 
+    <h4>Welcome {{ user_name}}!</h4>
+    <br>
+    <h5>Your available balance: <b>${{ current_balance }}</b></h5>
+    <br>
+    <h5>Your portfolio is worth: <b>${{ total_balance }}</b></h5>
+    <br>
+    <h5>Your total balance: <b>${{ total }}</b></h5>
+    <!-- <br>
+    <h5>Your profit/loss statement: <b>${{ profit_loss }}</b></h5>
+    <br> -->
+    <br>
+
+</div>
+
+{% if stock_name %}
+
+<div style="display:flex;">
+    <table class="table tablestriped" >
+        <thead>
+            <tr>
+                <th>Stock names</th>
+            </tr>
+        </thead>
+        {% for name in stock_name %}
+        <tbody>
+            <td>{{ name['symbol'] }}</td>
+        </tbody>
+        {% endfor %}
+    </table>
+
+    <!----------------->
+
+    <table class="table tablestriped" >
+        <thead>
+            <tr>
+                <th>Amount of shares</th>
+            </tr>
+        </thead>
+        {% for amount in stock_amount %}
+        <tbody>
+            <td>{{ amount['amount'] }}</td>
+
+        </tbody>
+        {% endfor %}
+    </table>
+
+    <!-------------->
+
+    <table class="table tablestriped" >
+        <thead>
+            <tr>
+                <th>Current shares price</th>
+            </tr>
+        </thead>
+        {% for price in s_price %}
+
+        <tbody>
+            <td>{{ price }}</td>
+        </tbody>
+        {% endfor %}
+    </table>
+
+    <!-------------->
+    <table class="table tablestriped" >
+        <thead>
+            <tr>
+                <th>Shares value</th>
+            </tr>
+        </thead>
+        {% for value in s_value %}
+        <tbody>
+            <td>{{ value }}</td>
+        </tbody>
+        {% endfor %}
+
+    </table>
+    </div>
+    {% else %} 
+    <a id="buy" href="/buy">Start buying stocks</a>
+    {% endif %}
+
+    <style>
+        #buy{
+            padding: 15px 20px 15px 20px;
+            background-color: orange;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}

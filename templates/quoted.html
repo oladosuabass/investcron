@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quotes
+{% endblock %}
+
+{% block main %}
+    <!-- {% for i, q in quotes.items() %}
+    <p>
+        {{ i }} : {{ q }}
+    </p>
+    {% endfor %} -->
+    <p>A share of {{quotes['name']}} ({{quotes['symbol']}}) costs {{quotes['price']}}</p>
+{% endblock %}
+

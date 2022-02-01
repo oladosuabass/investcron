@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        <!-- http://getbootstrap.com/docs/4.5/ -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+        <!-- https://favicon.io/emoji-favicons/money-mouth-face/ -->
+        <link href="/static/favicon.ico" rel="icon">
+
+        <link href="/static/styles.css" rel="stylesheet">
+
+        <!-- http://getbootstrap.com/docs/4.5/ -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        <!-- tailwind library -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title>C$50 Finance: Home</title>
+
+        <!-- Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap" rel="stylesheet">
+
+    </head>
+
+    <body>
+    
+        <nav class="navbar navbar-expand-md navbar-light bg-light border">
+            <a class="navbar-brand" href="/"><span class="blue">C</span><span class="red">$</span><span class="yellow">5</span><span class="green">0</span> <span class="red">Finance</span></a>
+            <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                {% if session.user_id %}
+                    <ul class="navbar-nav mr-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="/quote">Quote</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/buy">Buy</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/sell">Sell</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/history">History</a></li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto mt-2">
+                        <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
+                    </ul>
+                {% else %}
+                <ul class="navbar-nav ml-auto mt-2">
+                    <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
+                </ul>
+                {% endif %}
+            </div>
+        </nav>
+
+        {% if get_flashed_messages() %}
+            <header>
+                <div class="alert alert-primary border text-center" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                </div>
+            </header>
+        {% endif %}
+
+        <main class="container p-5">
+          <section id="hero"> 
+            Trade thousands of stocks with a free practice account.
+          </section>
+          <div style="margin-bottom:0.6em ;"><span>Buy & sell thousands of US stocks  | </span><span>Trade Real-Time stock  | </span><span>Get upto $100,000USD practice account</span></div>
+          <div id="registergroup"><a id="register" href="/register">Register for free</a></div>
+        
+
+
+          <div class="scroll-container">
+            {% for stock in data %}
+            <div id="scroll-element">
+              <div id="group">
+                <div id="symbol">{{ stock['symbol'] }}</div>
+                {% if stock['change'] * 100 > 1 %}
+                  <div  style="color: green;">+{{ stock['change'] * 100 }}% </div>
+                {% elif stock['change'] * 100 == 0 %}
+                  <div  style="color: grey;">{{ stock['change'] * 100 }}% </div>
+                {% else %}
+                  <div  style="color: red;">{{ stock['change'] * 100 }}% </div>
+                {% endif %}
+              </div>
+              <div id="price">{{ stock['price']}}</div>
+            </div>
+            {% endfor %}
+          </div>
+
+          
+      <style>
+        main{
+          font-family: 'Allerta Stencil', sans-serif;
+        }
+        #hero{
+          text-align:left; 
+          text-align: center; 
+          font-size: 50px; 
+          color:rgba(#000, #000, #000, 0.5); 
+          margin: 3em 0em 0.8em 0em;
+        }
+        #registergroup{
+          display: flex; justify-content: center;
+        }
+        #register{
+          text-decoration: none; 
+          color: white; 
+          border-radius: 5px; 
+          background-color: orange; 
+          padding: 10px 20px 10px 20px;
+        }
+        #group{
+          display:flex; direction:ltr
+        }
+        #symbol{
+          padding-right:5px;
+        }
+        #price{
+          font-size: 20px; font-weight: 700;
+        }
+        .scroll-container{
+          width: fit-content;
+          direction:rtl;
+          display: flex;
+          text-align: left;
+        }
+        #scroll-element{
+          padding: 50px;
+        }
+
+        @-webkit-keyframes scroll{
+          0% {
+            margin-right: 0%; /*if you want to scroll left to right set margin-left*/
+            
+          }
+          100%{
+            margin-right: 100%;/*if you want to scroll left to right set margin-left*/
+          }
+        }
+        
+      </style>
+      </main>
+      <script>
+        var elemWidth = document.getElementById('scroll-element').offsetWidth;
+        var time = elemWidth/80; /* 80 = scrolling speed (44px/s)*/
+        document.getElementById('scroll-element').style.cssText = "animation: scroll 20s linear infinite;"
+
+
+      </script>
+        
+      
+      
+      
+      
+
+        <footer class="small text-center text-muted">
+            Data provided for free by <a href="https://iextrading.com/developer">IEX</a>. View <a href="https://iextrading.com/api-exhibit-a/">IEX’s Terms of Use</a>.
+        </footer>
+
+    </body>
+
+</html>

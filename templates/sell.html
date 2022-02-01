@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Sell
+{% endblock %}
+
+{% block main %}
+
+<form action="/sell" method="post">
+  <div class="form-group">
+    <select class="form-select" name="stocks" id="stocks">
+      <option selected>Choose stock to sell</option>
+      {% for stock in stock_name %}
+      <option value="{{stock}}" >{{ stock }}</option>
+      {% endfor %}
+    </select>
+    <br> <br>
+    <input type="number" name="amount">
+    <button class="btn btn-primary" type="submit">Sell</button>
+  </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <form action="/register" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="username" id="username" placeholder="Username" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="password" id="password" placeholder="Password" type="password">
+        </div>
+         <div class="form-group">
+            <input class="form-control" name="confirmation" id="confirmation" placeholder="Confirm Password" type="password">
+        </div>
+        <span style="color: gray;">Set cash balance:  </span>
+        <div class="form-group">
+            <input class="form-range" onchange=setAmount() type="range" id="myRange" step="10000" name="cash" min="10000" max="100000" value="10000">
+            <div style="color: gray;"> $<span id="demo" style="color: gray;">10000</span>USD</div>
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+
+    <script>
+        function setAmount() {
+          var x = document.getElementById("myRange").value;
+          document.getElementById("demo").innerHTML = x;
+        }
+    </script>
+
+{% endblock %}
