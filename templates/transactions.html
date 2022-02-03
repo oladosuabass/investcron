@@ -1,0 +1,92 @@
+
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Transactions
+{% endblock %}
+
+{% block main %}
+
+{% if user_history %}
+<div style="display:flex;">
+    <table class="table tablestriped" >
+        <thead>
+            <tr>
+                <th>Symbol</th>
+            </tr>
+        </thead>
+        {% for symbol in user_history %}
+        <tbody>
+            <td>{{ symbol['symbol'] }}</td>
+        </tbody>
+        {% endfor %}
+    </table>
+
+    <!----------------->
+
+    <table class="table tablestriped" >
+        <thead>
+            <tr>
+                <th>Shares</th>
+            </tr>
+        </thead>
+        {% for shares in user_history %}
+        <tbody>
+            {% if shares['shares'] > 0 %}
+              <td style="color: green;">{{ shares['shares'] }}</td>
+            {% else %}
+              <td style="color: red;">{{ shares['shares'] }}</td>
+            {% endif %}
+
+
+        </tbody>
+        {% endfor %}
+    </table>
+
+    <!-------------->
+
+    <table class="table tablestriped" >
+        <thead>
+            <tr>
+                <th>Price</th>
+            </tr>
+        </thead>
+        {% for price in user_history %}
+
+        <tbody>
+            <td>{{ price['price'] }}</td>
+        </tbody>
+        {% endfor %}
+    </table>
+
+    <!-------------->
+    <table class="table tablestriped" >
+        <thead>
+            <tr>
+                <th>Date</th>
+            </tr>
+        </thead>
+        {% for date in user_history %}
+        <tbody>
+            <td>{{ date['date'] }}</td>
+        </tbody>
+        {% endfor %}
+
+    </table>
+    </div>
+    {% else %} 
+    <p>There is nothing to show here.</p>
+    <br> <br>
+    <a id="buy" href="/buy">Start buying stocks</a>
+    {% endif %}
+
+    <style>
+        #buy{
+            padding: 15px 20px 15px 20px;
+            background-color: orange;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+{% endblock %}

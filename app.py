@@ -138,6 +138,7 @@ def buy():
             spent_funds = db.execute("select SUM(cost) from purchases where username=?", users_name[0]['username'])
             users_balance = float(curr_blnce) - float(current_price * int(user_shares))
             db.execute("UPDATE users SET cash=? where username=?", str(users_balance), users_name[0]['username'])
+            db.execute("INSERT INTO history (username, symbol, price, shares, date) VALUES (:username, :symbol, :price, :shares, :date)", username=users_name[0]['username'], symbol=str(user_symbol), price=float(users_purchase_price), shares=int(users_amount), date=datetime.datetime.now().strftime("%c"))
 
         return redirect("/home")
       
@@ -150,7 +151,11 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    users_name = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
+    user_history = db.execute("SELECT symbol, shares, price, date FROM history WHERE username = ?", users_name[0]['username'])
+    # shares = db.execute("SELECT shares FROM history WHERE ")
+    return render_template('transactions.html', user_history=user_history)
+
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -265,11 +270,11 @@ def sell():
     if request.method == "POST":
         symbol = request.form.get("stocks")
         amount = request.form.get("amount")
+        u_name = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
 
         if symbol == '' or amount == '':
             return apology("Please select a stock symbol and enter an amount to sell")
         else:
-
             u_name = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
             stock_name = db.execute("SELECT symbol FROM purchases WHERE username = ?", u_name[0]['username'])
             stocks = [x['symbol'] for x in stock_name]
@@ -291,7 +296,9 @@ def sell():
 
                 db.execute("UPDATE purchases SET amount = ?, cost = ? WHERE symbol = ? AND username = ?", str(s_amount), str(cost), symbol, u_name[0]['username'])
                 db.execute("UPDATE users SET cash = ? WHERE username = ?", str(sold_stock_value), u_name[0]['username'])
-
+                sold = "-" + str(amount)
+                db.execute("INSERT INTO history (username, symbol, price, shares, date) VALUES (:username, :symbol, :price, :shares, :date)", username=u_name[0]['username'], symbol=str(symbol), price=float(current_stock_price), shares=int(sold), date=datetime.datetime.now().strftime("%c"))
+                
                 return redirect("home")
     check_stock_amount = '0.0'
     u_name = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])
